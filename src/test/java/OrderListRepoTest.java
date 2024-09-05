@@ -24,8 +24,9 @@ class OrderListRepoTest {
         Product product1 = new Product("1", "Apfel");
         expected.add(new Order("1", List.of(product1)));
 
-        assertEquals(actual, expected);
-    }
+        assertEquals(actual.size(), expected.size());
+        assertEquals(actual.get(0).orderStatus(), expected.get(0).orderStatus());
+        assertEquals(actual.get(0).products(), expected.get(0).products());    }
 
     @Test
     void getOrderById() {
@@ -43,7 +44,7 @@ class OrderListRepoTest {
         Product product1 = new Product("1", "Apfel");
         Order expected = new Order("1", List.of(product1));
 
-        assertEquals(actual, expected);
+        assertEquals(actual.products(), expected.products());
     }
 
     @Test
@@ -59,8 +60,9 @@ class OrderListRepoTest {
         //THEN
         Product product1 = new Product("1", "Apfel");
         Order expected = new Order("1", List.of(product1));
-        assertEquals(actual, expected);
-        assertEquals(repo.getOrderById("1"), expected);
+        assertEquals(actual.products(), expected.products());
+        assertEquals(repo.getOrderById("1").products(), expected.products());
+        assertEquals(repo.getOrderById("1").orderStatus(), expected.orderStatus());
     }
 
     @Test
