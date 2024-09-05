@@ -1,9 +1,7 @@
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @RequiredArgsConstructor
 public class ShopService {
@@ -30,8 +28,31 @@ public class ShopService {
         return orderRepo.addOrder(newOrder);
     }
 
-    public List<Order> getOrderByStatus(OrderStatus orderStatus){
+    public List<Order> getOrdersByStatus(OrderStatus orderStatus){
         return orderRepo.getOrders().stream()
                 .filter(order -> order.orderStatus().equals(orderStatus)).toList();
     }
+
+    // todo: here? or in the repo? how do we decide where each method goes?
+    public HashMap<OrderStatus,Order>getOldestOrdersByStatus(){
+        HashMap<OrderStatus,Order> temp = new HashMap<>();
+
+        Optional<Order> processing = getOrdersByStatus(OrderStatus.PROCESSING).stream()
+                .min(Comparator.comparing(Order::creationTimeUTC));
+
+        Optional<Order> in_delivery = getOrdersByStatus(OrderStatus.IN_DELIVERY).stream()
+                .min(Comparator.comparing(Order::creationTimeUTC));
+
+        Optional<Order> completed = getOrdersByStatus(OrderStatus.COMPLETED).stream()
+                .min(Comparator.comparing(Order::creationTimeUTC));
+
+        // todo: not the greatest solution to explicitly return null, but as first implementation, it works
+        temp.put(OrderStatus.PROCESSING, processing.orElse(null));
+        temp.put(OrderStatus.IN_DELIVERY, in_delivery.orElse(null));
+        temp.put(OrderStatus.COMPLETED, completed.orElse(null));
+
+        return temp;
+    }
+
+
 }

@@ -8,6 +8,7 @@ public class ProductRepo {
     public ProductRepo() {
         products = new ArrayList<>();
         products.add(new Product("1", "Apfel"));
+        // note: 2 is missing, see shop service test implementation
         products.add(new Product("3", "Birne"));
         products.add(new Product("4", "Orange"));
         products.add(new Product("5", "Gurke"));

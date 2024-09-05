@@ -4,7 +4,6 @@ import lombok.With;
 import java.time.Instant;
 import java.util.List;
 
-// todo: write wither for status
 @Builder
 public record Order(
         String id,
