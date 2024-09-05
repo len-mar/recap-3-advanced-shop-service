@@ -33,7 +33,6 @@ public class ShopService {
                 .filter(order -> order.orderStatus().equals(orderStatus)).toList();
     }
 
-    // todo: here? or in the repo? how do we decide where each method goes?
     public HashMap<OrderStatus,Order>getOldestOrdersByStatus(){
         HashMap<OrderStatus,Order> temp = new HashMap<>();
 
