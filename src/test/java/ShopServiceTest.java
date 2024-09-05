@@ -33,4 +33,29 @@ class ShopServiceTest {
         //THEN
         assertNull(actual);
     }
+
+    @Test
+    void getOrderByStatusTest_whenMatchingOrdersExist_expectPopulatedList() {
+        // todo: manually add new order with different status?
+        //GIVEN a shop service and order repo with one order (default status PROCESSING)
+        ShopService shopService = new ShopService();
+        List<String> productsIds = List.of("1");
+        shopService.addOrder(productsIds);
+
+        //WHEN the orders are retrieved by order status PROCESSING
+        //THEN there should only be one order received
+       assertEquals(shopService.getOrderByStatus(OrderStatus.PROCESSING).size(),1);
+    }
+
+    @Test
+    void getOrderByStatusTest_whenNoMatchingOrdersExist_expectEmptyList() {
+        //GIVEN a shop service and order repo with one order (default status PROCESSING)
+        ShopService shopService = new ShopService();
+        List<String> productsIds = List.of("1");
+        shopService.addOrder(productsIds);
+
+        //WHEN the orders are retrieved by order status COMPLETED
+        //THEN there should be zero orders retrieved
+        assertEquals(shopService.getOrderByStatus(OrderStatus.COMPLETED).size(),0);
+    }
 }
