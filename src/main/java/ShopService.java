@@ -1,11 +1,21 @@
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+@RequiredArgsConstructor
 public class ShopService {
-    private ProductRepo productRepo = new ProductRepo();
-    private OrderRepo orderRepo = new OrderMapRepo();
+    @NonNull private ProductRepo productRepo;
+    @NonNull private OrderRepo orderRepo;
+    @NonNull private UUID uuid;
 
+    public ShopService(){
+        this.productRepo = new ProductRepo();
+        this.orderRepo = new OrderMapRepo();
+        this.uuid = IdService.generateID();
+    }
 
     public Order addOrder(List<String> productIds) {
         List<Product> products = new ArrayList<>();
