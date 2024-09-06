@@ -5,11 +5,14 @@ import java.util.*;
 
 @RequiredArgsConstructor
 public class ShopService {
-    @NonNull private ProductRepo productRepo;
-    @NonNull private OrderRepo orderRepo;
-    @NonNull private UUID uuid;
+    @NonNull
+    private ProductRepo productRepo;
+    @NonNull
+    private OrderRepo orderRepo;
+    @NonNull
+    private UUID uuid;
 
-    public ShopService(){
+    public ShopService() {
         this.productRepo = new ProductRepo();
         this.orderRepo = new OrderMapRepo();
         this.uuid = IdService.generateID();
@@ -41,13 +44,13 @@ public class ShopService {
         return orderRepo.addOrder(newOrder);
     }
 
-    public List<Order> getOrdersByStatus(OrderStatus orderStatus){
+    public List<Order> getOrdersByStatus(OrderStatus orderStatus) {
         return orderRepo.getOrders().stream()
                 .filter(order -> order.orderStatus().equals(orderStatus)).toList();
     }
 
-    public HashMap<OrderStatus,Order>getOldestOrdersByStatus(){
-        HashMap<OrderStatus,Order> temp = new HashMap<>();
+    public HashMap<OrderStatus, Order> getOldestOrdersByStatus() {
+        HashMap<OrderStatus, Order> temp = new HashMap<>();
 
         Optional<Order> processing = getOrdersByStatus(OrderStatus.PROCESSING).stream()
                 .min(Comparator.comparing(Order::creationTimeUTC));
@@ -66,5 +69,12 @@ public class ShopService {
         return temp;
     }
 
+    // fixme: with every status change, the timestamp of "creation" is also changed
+    public void setStatus(String orderID, OrderStatus newStatus) {
+        orderRepo.addOrder(orderRepo.getOrderById(orderID).withOrderStatus(newStatus));
+    }
 
+    public void printOrders(){
+        orderRepo.getOrders().forEach(System.out::println);
+    }
 }
