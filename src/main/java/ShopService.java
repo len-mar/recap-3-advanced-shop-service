@@ -28,6 +28,19 @@ public class ShopService {
         return orderRepo.addOrder(newOrder);
     }
 
+    public Order addOrder(String orderId, List<String> productIds) {
+        List<Product> products = new ArrayList<>();
+        for (String productId : productIds) {
+            Product productToOrder = productRepo.getProductById(productId)
+                    .orElseThrow(() -> new ProductNotFoundException("Product mit der Id: " + productId + "existiert nicht und konnte nicht bestellt werden!"));
+            products.add(productToOrder);
+        }
+
+        Order newOrder = new Order(orderId, products);
+
+        return orderRepo.addOrder(newOrder);
+    }
+
     public List<Order> getOrdersByStatus(OrderStatus orderStatus){
         return orderRepo.getOrders().stream()
                 .filter(order -> order.orderStatus().equals(orderStatus)).toList();
